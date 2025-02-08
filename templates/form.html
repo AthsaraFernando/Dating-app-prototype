@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Form</title>
+</head>
+<body>
+    <h1>Complete Your Profile</h1>
+    <form action="{{ url_for('form', user_id=user_id) }}" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" name="name" required><br>
+
+        <label for="age">Age:</label>
+        <input type="number" name="age" required><br>
+
+        <label for="gender">Gender:</label>
+        <select name="gender" required>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Non-Binary">Non-Binary</option>
+            <option value="Other">Other</option>
+        </select><br>
+
+        <label for="city">City:</label>
+        <input type="text" name="city" required><br>
+
+        <label for="mbti">MBTI:</label>
+        <select name="mbti" required>
+            <option value="INFJ">INFJ</option>
+            <option value="INFP">INFP</option>
+            <option value="INTJ">INTJ</option>
+            <option value="INTP">INTP</option>
+            <option value="ISFJ">ISFJ</option>
+            <option value="ISFP">ISFP</option>
+            <option value="ISTJ">ISTJ</option>
+            <option value="ISTP">ISTP</option>
+            <option value="ENFJ">ENFJ</option>
+            <option value="ENFP">ENFP</option>
+            <option value="ENTJ">ENTJ</option>
+            <option value="ENTP">ENTP</option>
+            <option value="ESFJ">ESFJ</option>
+            <option value="ESFP">ESFP</option>
+            <option value="ESTJ">ESTJ</option>
+            <option value="ESTP">ESTP</option>
+        </select><br>
+
+        <label for="openness">Openness:</label>
+        <input type="number" step="0.01" name="openness" required><br>
+
+        <label for="conscientiousness">Conscientiousness:</label>
+        <input type="number" step="0.01" name="conscientiousness" required><br>
+
+        <label for="extraversion">Extraversion:</label>
+        <input type="number" step="0.01" name="extraversion" required><br>
+
+        <label for="agreeableness">Agreeableness:</label>
+        <input type="number" step="0.01" name="agreeableness" required><br>
+
+        <label for="neuroticism">Neuroticism:</label>
+        <input type="number" step="0.01" name="neuroticism" required><br>
+
+        <label>Hobbies (select all that apply):</label><br>
+        <input type="checkbox" name="hobbies" value="Reading"> Reading<br>
+        <input type="checkbox" name="hobbies" value="Gaming"> Gaming<br>
+        <input type="checkbox" name="hobbies" value="Hiking"> Hiking<br>
+        <input type="checkbox" name="hobbies" value="Cooking"> Cooking<br>
+        <input type="checkbox" name="hobbies" value="Traveling"> Traveling<br>
+        <input type="checkbox" name="hobbies" value="Photography"> Photography<br>
+        <input type="checkbox" name="hobbies" value="Music"> Music<br>
+        <input type="checkbox" name="hobbies" value="Sports"> Sports<br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
