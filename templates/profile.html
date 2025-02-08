@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+<body>
+    <h1>{{ user.name }}'s Profile</h1>
+    <p>Username: {{ user.id }}</p>
+    <p>Age: {{ user.age }}</p>
+    <p>Gender: {{ user.gender }}</p>
+    <p>Location: {{ user.location }}</p>
+    <p>MBTI: {{ user.mbti }}</p>
+    <p>Big Five Personality:</p>
+    <ul>
+        <li>Openness: {{ user.big_five.Openness }}</li>
+        <li>Conscientiousness: {{ user.big_five.Conscientiousness }}</li>
+        <li>Extraversion: {{ user.big_five.Extraversion }}</li>
+        <li>Agreeableness: {{ user.big_five.Agreeableness }}</li>
+        <li>Neuroticism: {{ user.big_five.Neuroticism }}</li>
+    </ul>
+    <p>Hobbies: {{ user.hobbies }}</p>
+    <a href="{{ url_for('test') }}">Go to Test Page</a>
+</body>
+</html>
