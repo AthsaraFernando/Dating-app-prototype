@@ -105,7 +105,7 @@ def sign_up():
             flash('User ID already exists!', 'error')
             return redirect(url_for('sign_up'))
 
-        users.append({"id": user_id, "password": user_id})
+        users.append({"id": user_id})
         save_user_data(users)
         flash('User created successfully!', 'success')
         return redirect(url_for('form', user_id=user_id))
@@ -119,9 +119,9 @@ def form(user_id):
         user_data = {
             "id": user_id,
             "name": request.form.get('name'),
-            "age": request.form.get('age'),
+            "age": int(request.form.get('age')),
             "gender": request.form.get('gender'),
-            "city": request.form.get('city'),
+            "location": request.form.get('location'),
             "mbti": request.form.get('mbti'),
             "big_five": {
                 "Openness": float(request.form.get('openness')),

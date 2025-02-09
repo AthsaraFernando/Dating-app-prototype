@@ -83,7 +83,7 @@ This prototype is a minimal implementation designed for testing and development.
    http://127.0.0.1:5000/
    ```
 
-## Running the Matchmaking Process
+## You can run these files mannualy for testing purposes
 
 1. Create user embeddings:
    ```sh
@@ -91,9 +91,16 @@ This prototype is a minimal implementation designed for testing and development.
    ```
 2. Run the matchmaking script:
    ```sh
-   python matchmaking.py user_0  # Replace `user_0` with the actual user ID
+   python matchmaking.py user_0  # Replace `user_0` with the actual user ID (eg- user_1 , user_6)
    ```
 3. View the matches in `test.html`.
+
+## You can run these files to generate fake user data
+
+1. Create fake users:
+   ```sh
+   python generate_fake_data.py
+   ```
 
 ## Security Concerns
 
