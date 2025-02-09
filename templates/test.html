@@ -3,10 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Page</title>
+    <title>Match Results</title>
+    <script>
+        function runMatching(userId) {
+            document.getElementById("loading").style.display = "block"; // Show loading animation
+            document.getElementById("matches").innerHTML = ""; // Clear old results
+
+            fetch(`/run-matching/${userId}`, { method: "POST" })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("loading").style.display = "none"; // Hide loading
+                if (data.status === "done") {
+                    let matchesList = '';
+                    data.matches.forEach(match => {
+                        matchesList += `<li>${match.name} (Score: ${match.compatibility_score})</li>`;
+                    });
+                    document.getElementById("matches").innerHTML = matchesList;
+                } else {
+                    document.getElementById("matches").innerHTML = "Error loading matches.";
+                }
+            });
+        }
+    </script>
 </head>
 <body>
-    <h1>Welcome to the Test Page!</h1>
-    <p>You are logged in!</p>
+    <h1>Welcome, {{ user_id }}!</h1>
+    <button onclick="runMatching('{{ user_id }}')">Check Matches</button>
+
+    <div id="loading" style="display: none;">Processing... Please wait.</div>
+    <div id="matches">
+        {% if matches %}
+            <h3>Your Matches:</h3>
+            <ul>
+                {% for match in matches %}
+                    <li>{{ match.name }} - Score: {{ match.compatibility_score }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No matches yet. Click "Check Matches" to generate.</p>
+        {% endif %}
+    </div>
 </body>
 </html>
