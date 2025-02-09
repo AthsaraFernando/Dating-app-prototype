@@ -73,15 +73,11 @@ def test(user_id):
     return render_template('test.html', user_id=user_id, matches=user_matches)
 
 # Run Matching Script (Triggered on "Check Matches")
+# Run Matching Script (Triggered on "Check Matches")
 @app.route('/run-matching/<user_id>', methods=['POST'])
 def run_matching(user_id):
-    # Load existing match scores (or create the file if it doesn't exist)
-    match_scores = load_match_scores()
-
     # Run the embedding generation and matchmaking scripts
     embedding_result = subprocess.run(["python", "generate_embeddings.py"], capture_output=True, text=True)
-
-    # Pass user_id to matchmaking.py
     matching_result = subprocess.run(["python", "matchmaking.py", user_id], capture_output=True, text=True)
 
     print("Embedding Script Output:", embedding_result.stdout)
@@ -93,30 +89,11 @@ def run_matching(user_id):
     # Reload the match scores after the scripts have run
     match_scores = load_match_scores()
 
-    # Update or create the match entry for the user
-    user_matches = [
-        {"user_id": "user_11", "name": "Alex", "compatibility_score": 0.88},
-        {"user_id": "user_2", "name": "Peyton", "compatibility_score": 0.83},
-        {"user_id": "user_8", "name": "Casey", "compatibility_score": 0.82},
-        {"user_id": "user_4", "name": "Jamie", "compatibility_score": 0.8}
-    ]  # Replace this with actual match data
-
-    # Check if the user already exists in the match_scores list
-    user_found = False
-    for entry in match_scores:
-        if entry['user_id'] == user_id:
-            entry['matches'] = user_matches
-            user_found = True
-            break
-
-    # If the user is not found, add a new entry
-    if not user_found:
-        match_scores.append({"user_id": user_id, "matches": user_matches})
-
-    # Save the updated match scores
-    save_match_scores(match_scores)
+    # Find the match entry for the current user_id
+    user_matches = next((entry["matches"] for entry in match_scores if entry["user_id"] == user_id), [])
 
     return jsonify({"status": "done", "matches": user_matches})
+
 
 # Sign-Up Page
 @app.route('/sign-up', methods=['GET', 'POST'])
