@@ -113,7 +113,7 @@ This prototype is a minimal implementation designed for testing and development.
 
 - Implement proper authentication with hashed passwords.
 - Replace JSON storage with a database (e.g., PostgreSQL, MongoDB).
-- Improve the matchmaking algorithm using more robust ML techniques.
+- Improve the matchmaking algorithm using more robust ML techniques
 - Enhance frontend UI for better user experience.
 
 This project is for **testing purposes only** and is not intended for production use.
