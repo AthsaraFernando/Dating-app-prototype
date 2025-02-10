@@ -8,10 +8,9 @@ The Dating App Prototype is a proof-of-concept matchmaking system that uses pers
 
 The matchmaking system uses the following weighted criteria to calculate compatibility:
 
-- **MBTI Compatibility (40%)**: Uses a predefined compatibility chart for all 16 MBTI types.
-- **Big Five Personality Traits (30%)**: Calculates similarity using Euclidean distance between users' Big Five traits.
-- **Vector Embeddings (20%)**: Uses cosine similarity between user embeddings generated from provided data.
-- **Hobbies and Interests (10%)**: Matches users based on common hobbies.
+- **MBTI Compatibility (20%)**: Uses a predefined compatibility chart for all 16 MBTI types.
+- **Big Five Personality Traits (40%)**: Calculates similarity using Euclidean distance between users' Big Five traits.
+- **Hobbies Similarity/ Vector Embeddings (40%)**: Matches users based on common hobbies Using cosine similarity between user embeddings generated from provided data.
 
 ## Overview
 
