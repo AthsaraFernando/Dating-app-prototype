@@ -73,11 +73,15 @@ This prototype is a minimal implementation designed for testing and development.
    ```sh
    pip install -r requirements.txt
    ```
-4. Run the Flask application:
+4. Create .env file and add the OpenAI API:
+   ```sh
+   OPENAI_API_KEY=sk-proj-XXXXXXXXXXXXXXXXXXXXXXX
+   ```
+5. Run the Flask application:
    ```sh
    python app.py
    ```
-5. Open your browser and go to:
+6. Open your browser and go to:
    ```
    http://127.0.0.1:5000/
    ```
