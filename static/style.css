@@ -1,0 +1,164 @@
+/* Import Poppins font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff0f3; /* Lavender Blush */
+    color: #590d22; /* Chocolate Cosmos */
+}
+
+h1, h2, h3 {
+    color: #800f2f; /* Claret */
+    font-weight: 600;
+}
+
+a {
+    color: #c9184a; /* Rose Red */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #ff4d6d; /* Bright Pink (Crayola) */
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: #a4133c; /* Amaranth Purple */
+    padding: 10px 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: white;
+    margin: 0 10px;
+    font-weight: 500;
+}
+
+.navbar a:hover {
+    color: #ff758f; /* Bright Pink (Crayola) 2 */
+}
+
+/* Container Styles */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 8px;
+    color: #800f2f; /* Claret */
+    font-weight: 500;
+}
+
+input, select, button {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #c9184a; /* Rose Red */
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+button {
+    background-color: #ff4d6d; /* Bright Pink (Crayola) */
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-weight: 500;
+}
+
+button:hover {
+    background-color: #ff758f; /* Bright Pink (Crayola) 2 */
+}
+
+/* Checkbox Styles */
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+}
+
+/* Loading Spinner */
+.loading {
+    display: none;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #c9184a; /* Rose Red */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Match Results */
+#matches {
+    margin-top: 20px;
+}
+
+#matches ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#matches li {
+    background-color: #ffccd5; /* Pink */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/* Flash Messages */
+.flash-messages {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.alert-error {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #c62828;
+}
+
+.alert-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+}
