@@ -255,5 +255,25 @@
             "Hiking",
             "Sports"
         ]
+    },
+    {
+        "id": "user_100",
+        "name": "Fernando",
+        "age": 27,
+        "gender": "Female",
+        "location": "Sri Lanka",
+        "mbti": "ISFJ",
+        "big_five": {
+            "Openness": 0.05,
+            "Conscientiousness": 0.04,
+            "Extraversion": 0.03,
+            "Agreeableness": 0.04,
+            "Neuroticism": 0.04
+        },
+        "hobbies": [
+            "Cooking",
+            "Traveling",
+            "Sports"
+        ]
     }
 ]
