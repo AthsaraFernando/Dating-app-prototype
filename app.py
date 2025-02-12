@@ -10,36 +10,23 @@ app.secret_key = 'your_secret_key_here'  # For flash messages
 USER_DATA_FILE = 'fake_user_data.json'
 MATCH_SCORES_FILE = 'match_scores.json'
 USER_EMBEDDINGS_FILE = 'user_embeddings.json'
+USER_CHOICES_FILE = 'user_choices.json'
+ACCEPTED_REJECTED_FILE = 'accepted_rejected.json'
 
-# Function to save user data
-def save_user_data(users):
-    with open(USER_DATA_FILE, 'w') as file:
-        json.dump(users, file, indent=4)
+# Function to load JSON data
+def load_json(file_path, default={}):
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, 'r') as file:
+                return json.load(file)
+        except json.JSONDecodeError:
+            return default
+    return default
 
-# Function to load user data
-def load_user_data():
-    if os.path.exists(USER_DATA_FILE):
-        with open(USER_DATA_FILE, 'r') as file:
-            return json.load(file)
-    return []
-
-
-# Function to load match scores
-def load_match_scores():
-    if os.path.exists(MATCH_SCORES_FILE):
-        with open(MATCH_SCORES_FILE, 'r') as file:
-            try:
-                data = json.load(file)
-            except (json.JSONDecodeError, ValueError):
-                data = []
-        return data
-    return []  # Return an empty list if file doesn't exist
-
-
-# Function to save match scores
-def save_match_scores(scores):
-    with open(MATCH_SCORES_FILE, 'w') as file:
-        json.dump(scores, file, indent=4)
+# Function to save JSON data
+def save_json(file_path, data):
+    with open(file_path, 'w') as file:
+        json.dump(data, file, indent=4)
 
 # Home Page
 @app.route('/')
@@ -51,7 +38,7 @@ def home():
 def login():
     if request.method == 'POST':
         user_id = request.form.get('user_id')
-        users = load_user_data()
+        users = load_json(USER_DATA_FILE, [])
         if any(user['id'] == user_id for user in users):
             return redirect(url_for('test', user_id=user_id))
         flash('Invalid user ID', 'error')
@@ -61,37 +48,58 @@ def login():
 # Test Page (Displays Matches)
 @app.route('/test/<user_id>')
 def test(user_id):
-    match_scores = load_match_scores()
-    user_matches = []
-    
-    # Find the user in the match_scores list
-    for entry in match_scores:
-        if entry['user_id'] == user_id:
-            user_matches = entry.get('matches', [])
-            break
+    match_scores = load_json(MATCH_SCORES_FILE, [])
+    user_matches = next((entry['matches'] for entry in match_scores if entry['user_id'] == user_id), [])
+    user_choices = load_json(ACCEPTED_REJECTED_FILE, {}).get(user_id, {"accepted": [], "rejected": []})
+    accepted_user_ids = user_choices["accepted"]
+    rejected_user_ids = user_choices["rejected"]
+    return render_template('test.html', user_id=user_id, matches=user_matches, accepted_user_ids=accepted_user_ids, rejected_user_ids=rejected_user_ids)
 
-    return render_template('test.html', user_id=user_id, matches=user_matches)
 
-# Run Matching Script (Triggered on "Check Matches")
+# Accept or Reject Matches
+@app.route('/accept_reject', methods=['POST'])
+def accept_reject():
+    data = request.get_json()
+    print("Received data:", data)  # Debugging: Check what data is coming in
+
+    user_id = data.get("user_id")
+    match_id = data.get("match_id")
+    choice = data.get("choice")
+
+    if not user_id or not match_id or not choice:
+        return jsonify({"status": "error", "message": "Missing data"}), 400
+
+    # Load previous accept/reject data
+    accepted_rejected_file = 'accepted_rejected.json'
+    choices = load_json(accepted_rejected_file, {})
+
+    # Ensure the user_id exists in the JSON structure
+    if user_id not in choices:
+        choices[user_id] = {"accepted": [], "rejected": []}
+
+    # Store the match_id in the correct list
+    if choice == "accept" and match_id not in choices[user_id]["accepted"]:
+        choices[user_id]["accepted"].append(match_id)
+    elif choice == "reject" and match_id not in choices[user_id]["rejected"]:
+        choices[user_id]["rejected"].append(match_id)
+
+    # Save the updated choices
+    save_json(accepted_rejected_file, choices)
+
+    return jsonify({"status": "success", "message": f"Choice '{choice}' saved for match '{match_id}'."})
+
+
 # Run Matching Script (Triggered on "Check Matches")
 @app.route('/run-matching/<user_id>', methods=['POST'])
 def run_matching(user_id):
-    # Run the embedding generation and matchmaking scripts
     embedding_result = subprocess.run(["python", "generate_embeddings.py"], capture_output=True, text=True)
     matching_result = subprocess.run(["python", "matchmaking.py", user_id], capture_output=True, text=True)
-
-    print("Embedding Script Output:", embedding_result.stdout)
-    print("Matching Script Output:", matching_result.stdout)
 
     if embedding_result.returncode != 0 or matching_result.returncode != 0:
         return jsonify({"status": "error", "message": "Error running scripts"})
 
-    # Reload the match scores after the scripts have run
-    match_scores = load_match_scores()
-
-    # Find the match entry for the current user_id
+    match_scores = load_json(MATCH_SCORES_FILE, [])
     user_matches = next((entry["matches"] for entry in match_scores if entry["user_id"] == user_id), [])
-
     return jsonify({"status": "done", "matches": user_matches})
 
 
@@ -100,13 +108,13 @@ def run_matching(user_id):
 def sign_up():
     if request.method == 'POST':
         user_id = request.form.get('user_id')
-        users = load_user_data()
+        users = load_json(USER_DATA_FILE, [])
         if any(user['id'] == user_id for user in users):
             flash('User ID already exists!', 'error')
             return redirect(url_for('sign_up'))
 
         users.append({"id": user_id})
-        save_user_data(users)
+        save_json(USER_DATA_FILE, users)
         flash('User created successfully!', 'success')
         return redirect(url_for('form', user_id=user_id))
     
@@ -133,13 +141,13 @@ def form(user_id):
             "hobbies": request.form.getlist('hobbies')
         }
 
-        users = load_user_data()
+        users = load_json(USER_DATA_FILE, [])
         for user in users:
             if user['id'] == user_id:
                 user.update(user_data)
                 break
         
-        save_user_data(users)
+        save_json(USER_DATA_FILE, users)
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('home'))
 

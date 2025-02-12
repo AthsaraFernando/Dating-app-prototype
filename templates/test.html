@@ -1,74 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Match Results</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script>
-        function runMatching(userId) {
-            // Show loading animation
-            document.getElementById("loading").style.display = "block";
-            // Clear old results
-            document.getElementById("matches").innerHTML = "";
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Match Results</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script>
+    function runMatching(userId) {
+      document.getElementById("loading").style.display = "block";
+      document.getElementById("matches").innerHTML = "";
+      fetch(`/run-matching/${userId}`, { method: "POST" })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("loading").style.display = "none";
+          if (data.status === "done") {
+            let matchesList = '<h3>Your Matches:</h3><ul>';
+            data.matches.forEach(match => {
+              matchesList += `<li>${match.name} (Score: ${match.compatibility_score})
+                <button onclick="acceptReject('${userId}', '${match.user_id}', 'accept')">Accept</button>
+                <button onclick="acceptReject('${userId}', '${match.user_id}', 'reject')">Reject</button>
+              </li>`;
+            });
+            matchesList += '</ul>';
+            document.getElementById("matches").innerHTML = matchesList;
+          } else {
+            document.getElementById("matches").innerHTML = "<p>Error loading matches.</p>";
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("matches").innerHTML = "<p>An error occurred while fetching matches.</p>";
+        });
+    }
 
-            fetch(`/run-matching/${userId}`, { method: "POST" })
-                .then(response => response.json())
-                .then(data => {
-                    // Hide loading animation
-                    document.getElementById("loading").style.display = "none";
-
-                    if (data.status === "done") {
-                        let matchesList = '<h3>Your Matches:</h3><ul>';
-                        data.matches.forEach(match => {
-                            matchesList += `<li>${match.name} (Score: ${match.compatibility_score})</li>`;
-                        });
-                        matchesList += '</ul>';
-                        document.getElementById("matches").innerHTML = matchesList;
-                    } else {
-                        document.getElementById("matches").innerHTML = "<p>Error loading matches.</p>";
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    // Hide loading animation
-                    document.getElementById("loading").style.display = "none";
-                    document.getElementById("matches").innerHTML = "<p>An error occurred while fetching matches.</p>";
-                });
+    function acceptReject(userId, matchId, choice) {
+      fetch("/accept_reject", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: userId, match_id: matchId, choice: choice })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          alert(`You have ${choice}ed ${matchId}`);
+        } else {
+          alert("Error saving choice.");
         }
-    </script>
+      })
+      .catch(error => console.error("Error:", error));
+    }
+  </script>
 </head>
 <body>
-    <div class="navbar">
-        <span>Dating App</span>
-        <div>
-            <a href="{{ url_for('home') }}">Home</a>
-        </div>
+  <div class="navbar">
+    <span>Dating App</span>
+    <div>
+      <a href="{{ url_for('home') }}">Home</a>
     </div>
-    <div class="container">
-        <h1>Welcome, {{ user_id }}!</h1>
-        <button onclick="runMatching('{{ user_id }}')">Check Matches</button>
-
-        <!-- Loading Animation -->
-        <div class="loading" id="loading">
-            <div class="loading-spinner"></div>
-            <p>Processing... Please wait.</p>
-        </div>
-
-        <!-- Matches Section -->
-        <div id="matches">
-            {% if matches %}
-                <h3>Your Matches:</h3>
-                <ul>
-                    {% for match in matches %}
-                        <li>{{ match.name }} - Score: {{ match.compatibility_score }}</li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No matches yet. Click "Check Matches" to generate.</p>
-            {% endif %}
-        </div>
+  </div>
+  <div class="container">
+    <h1>Welcome, {{ user_id }}!</h1>
+    <button onclick="runMatching('{{ user_id }}')">Check Matches</button>
+    <div class="loading" id="loading">
+      <div class="loading-spinner"></div>
+      <p>Processing... Please wait.</p>
     </div>
+    <div id="matches">
+      {% if matches %}
+        <h3>Your Matches:</h3>
+        <ul>
+          {% for match in matches %}
+            <li>
+              {{ match.name }} - Score: {{ match.compatibility_score }}
+              <button onclick="acceptReject('{{ user_id }}', '{{ match.user_id }}', 'accept')">Accept</button>
+              <button onclick="acceptReject('{{ user_id }}', '{{ match.user_id }}', 'reject')">Reject</button>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No matches yet. Click "Check Matches" to generate.</p>
+      {% endif %}
+    </div>
+
+    
+  </div>
 </body>
 </html>
