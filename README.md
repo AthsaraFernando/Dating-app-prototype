@@ -56,6 +56,7 @@ This prototype is a minimal implementation designed for testing and development.
   - `form.html` - Profile update form.
   - `profile.html` - Displays user profile.
   - `test.html` - Displays match results.
+  - `chat.html` - Chat UI where users can message with matches users.
   - `accepted_rejected.json` - Store the accepted and rejected user choices.
 
 ## Setup and Installation

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Chat</title>
+    <style>
+        /* Add your CSS for the chat interface here */
+        .chat-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+            max-height: 500px;
+            overflow-y: scroll;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 60%;
+        }
+
+        .sent {
+            background-color: #f1f1f1;
+            text-align: right;
+        }
+
+        .received {
+            background-color: #d1f7d1;
+            text-align: left;
+        }
+
+        .contacts-sidebar {
+            float: left;
+            width: 20%;
+            padding-right: 10px;
+        }
+
+        .contacts-sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .contacts-sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .contacts-sidebar li a {
+            text-decoration: none;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <span>Dating App</span>
+        <div>
+            <a href="{{ url_for('home') }}">Home</a>
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <div class="contacts-sidebar">
+            <h3>Your Matches</h3>
+            <ul>
+                {% for contact in contacts %}
+                    <li><a href="#" onclick="loadMessages('{{ user_id }}', '{{ contact['id'] }}')">{{ contact['name'] }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="chat-box" id="chat-box">
+            <h3>Chat with: <span id="contact-name"></span></h3>
+            <div class="messages" id="messages">
+                <!-- Chat messages will appear here -->
+            </div>
+            <textarea id="message-input" placeholder="Type a message..."></textarea>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Load chat messages for a specific contact
+        function loadMessages(userId, contactId) {
+            fetch(`/chat/messages/${userId}/${contactId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const messagesContainer = document.getElementById('messages');
+                        messagesContainer.innerHTML = '';
+
+                        // Set the contact name
+                        document.getElementById('contact-name').textContent = contactId;
+
+                        // Display all the messages
+                        data.messages.forEach(message => {
+                            const messageElement = document.createElement('div');
+                            messageElement.classList.add('message');
+                            messageElement.classList.add(message.sender_id === userId ? 'sent' : 'received');
+                            messageElement.textContent = message.message;
+                            messagesContainer.appendChild(messageElement);
+                        });
+
+                        // Scroll to the bottom of the chat
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
+                })
+                .catch(error => console.error("Error loading messages:", error));
+        }
+
+        // Send a new message
+        function sendMessage() {
+            const message = document.getElementById('message-input').value;
+            if (message.trim() === '') return;
+
+            const userId = '{{ user_id }}';
+            const contactId = document.getElementById('contact-name').textContent;
+
+            fetch('/chat/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sender_id: userId,
+                    receiver_id: contactId,
+                    message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    loadMessages(userId, contactId);  // Reload messages after sending
+                    document.getElementById('message-input').value = '';  // Clear the input field
+                } else {
+                    alert('Error sending message');
+                }
+            })
+            .catch(error => console.error("Error sending message:", error));
+        }
+    </script>
+</body>
+</html>
