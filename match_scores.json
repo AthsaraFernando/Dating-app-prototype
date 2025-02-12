@@ -6,6 +6,11 @@
                 "user_id": "user_500",
                 "name": "Sarah",
                 "compatibility_score": 0.98
+            },
+            {
+                "user_id": "user_100",
+                "name": "Fernando",
+                "compatibility_score": 0.8
             }
         ]
     },
