@@ -162,3 +162,97 @@ button:hover {
     color: #2e7d32;
     border: 1px solid #2e7d32;
 }
+
+/* Chat Styles */
+.chat-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.contacts-sidebar {
+    width: 25%;
+    padding-right: 20px;
+}
+
+.contacts-sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.contacts-sidebar li {
+    margin-bottom: 10px;
+}
+
+.contacts-sidebar li a {
+    text-decoration: none;
+    color: #590d22; /* Chocolate Cosmos */
+}
+
+.contacts-sidebar li a:hover {
+    color: #ff758f; /* Bright Pink (Crayola) */
+}
+
+.chat-box {
+    width: 70%;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #c9184a; /* Rose Red */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+.chat-box h3 {
+    margin-bottom: 20px;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 75%;
+    line-height: 1.5;
+}
+
+.sent {
+    background-color: #ffccd5; /* Pink */
+    text-align: right;
+}
+
+.received {
+    background-color: #d1f7d1; /* Light Green */
+    text-align: left;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #c9184a; /* Rose Red */
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #ff4d6d; /* Bright Pink (Crayola) */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #ff758f; /* Bright Pink (Crayola) 2 */
+}

@@ -153,5 +153,69 @@ def form(user_id):
 
     return render_template('form.html', user_id=user_id)
 
+# Chat Page (Displays the chat UI)
+@app.route('/chat/<user_id>')
+def chat(user_id):
+    # Load accepted/rejected data
+    accepted_rejected = load_json(ACCEPTED_REJECTED_FILE, {})
+    user_choices = accepted_rejected.get(user_id, {"accepted": []})
+    accepted_user_ids = user_choices["accepted"]
+
+    # Retrieve user data for accepted matches
+    users = load_json(USER_DATA_FILE, [])
+    contacts = [user for user in users if user["id"] in accepted_user_ids]
+
+    return render_template('chat.html', user_id=user_id, contacts=contacts)
+
+
+# Path to chat messages file
+CHAT_MESSAGES_FILE = 'messages.json'
+
+# Function to load chat messages
+def load_chat_messages():
+    return load_json(CHAT_MESSAGES_FILE, {})
+
+# Function to save chat messages
+def save_chat_messages(messages):
+    save_json(CHAT_MESSAGES_FILE, messages)
+
+# Chat Messages Route (Get Messages for a Conversation)
+@app.route('/chat/messages/<user_id>/<contact_id>', methods=['GET'])
+def get_chat_messages(user_id, contact_id):
+    messages = load_chat_messages()
+
+    # Get the conversation between user and contact
+    chat_id = f"{min(user_id, contact_id)}_{max(user_id, contact_id)}"
+    chat = messages.get(chat_id, [])
+
+    return jsonify({"status": "success", "messages": chat})
+
+# Send Message Route (Post New Message)
+@app.route('/chat/send', methods=['POST'])
+def send_message():
+    data = request.get_json()
+    sender_id = data.get("sender_id")
+    receiver_id = data.get("receiver_id")
+    message = data.get("message")
+
+    if not sender_id or not receiver_id or not message:
+        return jsonify({"status": "error", "message": "Missing data"}), 400
+
+    messages = load_chat_messages()
+
+    # Create a unique chat_id based on sender and receiver
+    chat_id = f"{min(sender_id, receiver_id)}_{max(sender_id, receiver_id)}"
+
+    # Add the message to the chat
+    if chat_id not in messages:
+        messages[chat_id] = []
+
+    messages[chat_id].append({"sender_id": sender_id, "receiver_id": receiver_id, "message": message, "timestamp": "2025-02-12T12:00:00"})  # Add timestamp for better tracking
+
+    save_chat_messages(messages)
+
+    return jsonify({"status": "success", "message": "Message sent."})
+
+
 if __name__ == '__main__':
     app.run(debug=True)

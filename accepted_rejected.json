@@ -1,0 +1,19 @@
+{
+    "user_0": {
+        "accepted": [
+            "user_500"
+        ],
+        "rejected": [
+            "user_100"
+        ]
+    },
+    "user_500": {
+        "accepted": [
+            "user_0",
+            "user_9"
+        ],
+        "rejected": [
+            "user_7"
+        ]
+    }
+}
