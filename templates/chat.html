@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Chat</title>
     <style>
-        /* Add your CSS for the chat interface here */
         .chat-box {
             border: 1px solid #ccc;
             padding: 20px;
@@ -54,6 +53,55 @@
             text-decoration: none;
             color: #333;
         }
+
+        /* New styles for the AI suggestion area */
+        .ai-suggestions {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            max-width: 200px;
+        }
+
+        .ai-suggestion {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .ai-suggestion-button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .ai-suggestion-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Spinner style */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: none; /* Hidden initially */
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -81,6 +129,13 @@
             </div>
             <textarea id="message-input" placeholder="Type a message..."></textarea>
             <button onclick="sendMessage()">Send</button>
+        </div>
+
+        <!-- AI Suggestion UI -->
+        <div class="ai-suggestions" id="ai-suggestions">
+            <button class="ai-suggestion-button" onclick="getAISuggestions()">Get AI Suggestions</button>
+            <div id="loading-spinner" class="spinner"></div>
+            <div id="suggestion-container"></div>
         </div>
     </div>
 
@@ -140,6 +195,43 @@
                 }
             })
             .catch(error => console.error("Error sending message:", error));
+        }
+
+        // Get AI suggestions
+        function getAISuggestions() {
+            const userId = '{{ user_id }}';
+            const contactId = document.getElementById('contact-name').textContent;
+
+            // Show the loading spinner
+            document.getElementById('loading-spinner').style.display = 'inline-block';
+            document.getElementById('suggestion-container').innerHTML = ''; // Clear previous suggestions
+
+            fetch(`/chat/ai-suggestions/${userId}/${contactId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Hide the loading spinner
+                    document.getElementById('loading-spinner').style.display = 'none';
+
+                    if (data.status === 'success') {
+                        const suggestionContainer = document.getElementById('suggestion-container');
+
+                        // Display AI suggestions
+                        data.suggestions.forEach(suggestion => {
+                            const suggestionElement = document.createElement('div');
+                            suggestionElement.classList.add('ai-suggestion');
+                            suggestionElement.textContent = suggestion;
+                            suggestionElement.onclick = function() {
+                                document.getElementById('message-input').value = suggestion;
+                            };
+
+                            suggestionContainer.appendChild(suggestionElement);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching AI suggestions:", error);
+                    document.getElementById('loading-spinner').style.display = 'none';
+                });
         }
     </script>
 </body>

@@ -3,45 +3,13 @@
         {
             "sender_id": "user_0",
             "receiver_id": "user_500",
-            "message": "hello\n",
+            "message": "Hey Sarah",
             "timestamp": "2025-02-12T12:00:00"
         },
         {
             "sender_id": "user_500",
             "receiver_id": "user_0",
-            "message": "hi",
-            "timestamp": "2025-02-12T12:00:00"
-        },
-        {
-            "sender_id": "user_0",
-            "receiver_id": "user_500",
-            "message": "how r u\n",
-            "timestamp": "2025-02-12T12:00:00"
-        },
-        {
-            "sender_id": "user_0",
-            "receiver_id": "user_500",
-            "message": "2",
-            "timestamp": "2025-02-12T12:00:00"
-        },
-        {
-            "sender_id": "user_0",
-            "receiver_id": "user_500",
-            "message": "feb",
-            "timestamp": "2025-02-12T12:00:00"
-        },
-        {
-            "sender_id": "user_500",
-            "receiver_id": "user_0",
-            "message": "s",
-            "timestamp": "2025-02-12T12:00:00"
-        }
-    ],
-    "user_500_user_9": [
-        {
-            "sender_id": "user_500",
-            "receiver_id": "user_9",
-            "message": "sup",
+            "message": "Hi\n",
             "timestamp": "2025-02-12T12:00:00"
         }
     ]

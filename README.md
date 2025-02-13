@@ -76,9 +76,10 @@ This prototype is a minimal implementation designed for testing and development.
    ```sh
    pip install -r requirements.txt
    ```
-4. Create .env file and add the OpenAI API:
+4. Create .env file and add the OpenAI API and Your Deepseek API keys:
    ```sh
    OPENAI_API_KEY=sk-proj-XXXXXXXXXXXXXXXXXXXXXXX
+   DEEPSEEK_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
    ```
 5. Run the Flask application:
    ```sh

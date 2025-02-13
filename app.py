@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 import json
 import os
 import subprocess
+from openai import OpenAI
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # For flash messages
@@ -216,6 +218,37 @@ def send_message():
 
     return jsonify({"status": "success", "message": "Message sent."})
 
+
+# Initialize the DeepSeek API client using the API key from the .env file
+client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
+
+@app.route('/chat/ai-suggestions/<user_id>/<contact_id>', methods=['GET'])
+def ai_suggestions(user_id, contact_id):
+    # Fetch previous messages between user and contact
+    messages = load_chat_messages()
+    chat_id = f"{min(user_id, contact_id)}_{max(user_id, contact_id)}"
+    chat = messages.get(chat_id, [])
+
+    # Generate the conversation context from the last few messages
+    context = "\n".join([message["message"] for message in chat[-5:]])  # Use the last 5 messages
+
+    # Make the API call to generate suggestions
+    try:
+        response = client.chat.completions.create(
+            model="deepseek-chat",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": "Give a practical conversation starter or a pick up line in a dating app when talk to a person who like reading books, keep it very short and sweet and flirty ."},
+            ],
+            stream=False
+        )
+        suggestions = response.choices[0].message.content.split('\n')  # Assuming the response is a list of suggestions
+
+        return jsonify({"status": "success", "suggestions": suggestions})
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
