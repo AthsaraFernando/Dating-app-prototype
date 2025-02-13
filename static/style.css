@@ -256,3 +256,21 @@ button {
 button:hover {
     background-color: #ff758f; /* Bright Pink (Crayola) 2 */
 }
+
+.suggestions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.suggestion-btn {
+    background: #f0f0f0;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.suggestion-btn:hover {
+    background: #ddd;
+}
