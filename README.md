@@ -70,7 +70,7 @@ This prototype is a minimal implementation designed for testing and development.
 2. Create a virtual environment and activate it:
    ```sh
    python -m venv venv
-   source venv/bin/activate   # On Windows use `venv\Scripts\activate`
+   On Windows use `venv\Scripts\activate # mac 'source venv/bin/activate'
    ```
 3. Install dependencies:
    ```sh

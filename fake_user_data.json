@@ -275,5 +275,25 @@
             "Traveling",
             "Sports"
         ]
+    },
+    {
+        "id": "user_200",
+        "name": "asda",
+        "age": 19,
+        "gender": "Male",
+        "location": "asda",
+        "mbti": "INTP",
+        "big_five": {
+            "Openness": 0.02,
+            "Conscientiousness": 0.01,
+            "Extraversion": 0.01,
+            "Agreeableness": 0.01,
+            "Neuroticism": 0.02
+        },
+        "hobbies": [
+            "Traveling",
+            "Photography",
+            "Sports"
+        ]
     }
 ]
