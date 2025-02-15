@@ -15,31 +15,6 @@
         ]
     },
     {
-        "user_id": "user_6",
-        "matches": [
-            {
-                "user_id": "user_11",
-                "name": "Alex",
-                "compatibility_score": 0.88
-            },
-            {
-                "user_id": "user_2",
-                "name": "Peyton",
-                "compatibility_score": 0.83
-            },
-            {
-                "user_id": "user_8",
-                "name": "Casey",
-                "compatibility_score": 0.82
-            },
-            {
-                "user_id": "user_4",
-                "name": "Jamie",
-                "compatibility_score": 0.8
-            }
-        ]
-    },
-    {
         "user_id": "user_500",
         "matches": [
             {
@@ -56,21 +31,6 @@
                 "user_id": "user_9",
                 "name": "Alex",
                 "compatibility_score": 0.81
-            }
-        ]
-    },
-    {
-        "user_id": "user_9",
-        "matches": [
-            {
-                "user_id": "user_500",
-                "name": "Sarah",
-                "compatibility_score": 0.93
-            },
-            {
-                "user_id": "user_100",
-                "name": "Fernando",
-                "compatibility_score": 0.78
             }
         ]
     }

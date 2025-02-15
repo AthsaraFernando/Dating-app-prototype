@@ -1,15 +1,15 @@
 {
     "user_0_user_500": [
         {
-            "sender_id": "user_0",
-            "receiver_id": "user_500",
-            "message": "Hey Sarah",
+            "sender_id": "user_500",
+            "receiver_id": "user_0",
+            "message": "\"Hey, I was just wondering... if you were a book, would you let me check you out?\" \ud83d\udcda\ud83d\ude09",
             "timestamp": "2025-02-12T12:00:00"
         },
         {
-            "sender_id": "user_500",
-            "receiver_id": "user_0",
-            "message": "Hi\n",
+            "sender_id": "user_0",
+            "receiver_id": "user_500",
+            "message": ":)",
             "timestamp": "2025-02-12T12:00:00"
         }
     ]
