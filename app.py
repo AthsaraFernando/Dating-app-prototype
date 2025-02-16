@@ -3,7 +3,9 @@ import json
 import os
 import subprocess
 from openai import OpenAI
+from dotenv import load_dotenv
 
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # For flash messages
